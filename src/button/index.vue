@@ -18,12 +18,14 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-@Component
+@Component({
+    name: 'MButton',
+})
 export default class MButton extends Vue {
-  @Prop({ default: 'default' }) type!: string
-  @Prop({ default: 'default' }) size!: string
-  @Prop({ default: '' }) icon!: string
-  @Prop() disabled!: boolean
+  @Prop({ default: 'default' }) public size!: string
+  @Prop ({ default: 'default' }) public type!: string
+  @Prop({ default: '' }) public icon!: string
+  @Prop() public disabled!: boolean
 }
 </script>
 

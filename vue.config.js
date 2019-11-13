@@ -52,7 +52,7 @@ const vueMarkdown = {
     ]
   }
   
-
+const isMinify = process.argv.indexOf('-p') !== -1;
 
 module.exports = {
     // 修改 pages 入口
@@ -61,7 +61,28 @@ module.exports = {
             entry: 'doc/main.ts', // 入口
             template: 'public/index.html', // 模板
             filename: 'index.html', // 输出文件
-        }
+            output: {
+              path: path.join(__dirname, 'lib'),
+              library: 'mics-ui',
+              libraryTarget: 'umd',
+              filename: isMinify ? '[name].min.js' : '[name].js',
+              umdNamedDefine: true,
+              // https://github.com/webpack/webpack/issues/6522
+              globalObject: 'typeof self !== \'undefined\' ? self : this'
+            },
+            externals: {
+              vue: {
+                root: 'Vue',
+                commonjs: 'vue',
+                commonjs2: 'vue',
+                amd: 'vue'
+              }
+            },
+            performance: false,
+            optimization: {
+              minimize: isMinify
+            }
+        },
     },
     // 扩展 webpack 配置
     chainWebpack: config => {
