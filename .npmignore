@@ -1,0 +1,15 @@
+# 忽略目录
+doc/
+src/
+public/
+build/
+tests/
+
+# 忽略指定文件
+vue.config.js
+babel.config.js
+global.d.ts
+postcss.config.js
+tsconfig.json
+tslint.json
+*.map

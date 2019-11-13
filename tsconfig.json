@@ -8,9 +8,11 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "esModuleInterop": true,
+    "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
+    "noImplicitAny": false,
     "types": [
       "webpack-env",
       "mocha",
@@ -18,7 +20,7 @@
     ],
     "paths": {
       "@/*": [
-        "src/*"
+        "doc/*"
       ]
     },
     "lib": [
@@ -33,7 +35,8 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "tests/**/*.tsx",
+    "global.d.ts"
   ],
   "exclude": [
     "node_modules"
