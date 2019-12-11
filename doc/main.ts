@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
-import MICSUI from '../src/index';
+import MICSUI from '../package/index';
 import DemoBlock from './components/DemoBlock.vue';
 
 Vue.config.productionTip = false;

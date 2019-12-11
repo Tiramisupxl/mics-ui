@@ -19,8 +19,8 @@ export default {
           path: '/'
         },
         {
-          title: '输入框',
-          path: '/'
+          title: 'input 输入框',
+          path: '/input'
         }
       ]
     }

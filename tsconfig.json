@@ -31,12 +31,14 @@
     ]
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
+    "package/**/*.ts",
+    "package/**/*.tsx",
+    "package/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx",
-    "global.d.ts"
+    "global.d.ts",
+    "types/*.d.ts", 
+    "types/component.ts"
   ],
   "exclude": [
     "node_modules"

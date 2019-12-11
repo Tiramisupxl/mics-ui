@@ -1,6 +1,6 @@
 # 忽略目录
 doc/
-src/
+package/
 public/
 build/
 tests/

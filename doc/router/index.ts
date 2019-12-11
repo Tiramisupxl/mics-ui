@@ -19,7 +19,7 @@ const addComponent = (router) => {
       routes = routes.concat(route.groups)
     } else {
       route.component = (r) => require.ensure([], () =>
-        r(require(`../../src${route.path}/demo.md`)))
+        r(require(`../../package${route.path}/demo.md`)))
     }
   })
 }

@@ -1,5 +1,9 @@
 <template>
-    <div class="docs-demo-wrapper">
+    <div class="demo-block">
+       <div class="source">
+            <slot name="source"></slot>
+        </div>
+        <div class="docs-demo-wrapper">
         <div :style="{height: isExpand ? 'auto' : '0'}" class="demo-container">
             <div>
                 <div class="docs-demo docs-demo--expand">
@@ -15,6 +19,8 @@
             @click="toggle"
         >{{isExpand ? '隐藏代码' : '显示代码'}}</span>
     </div>
+    </div>
+    
 </template>
 
 <script lang="ts">

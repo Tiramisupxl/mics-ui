@@ -2,6 +2,7 @@ const path = require('path')
 const utils = require('./build/utils')
 const MarkdownItContainer = require('markdown-it-container')
 const striptags = require('./build/strip-tags')
+const md = require('markdown-it')()
 
 
 const vueMarkdown = {
@@ -37,13 +38,15 @@ const vueMarkdown = {
           var m = tokens[idx].info.trim().match(/^demo\s*(.*)$/);
           if (tokens[idx].nesting === 1) {
             var desc = tokens[idx + 2].content;
-            const html = utils.convertHtml(striptags(tokens[idx + 1].content, 'script'))
-            console.log(html)
+            var content = tokens[idx + 1].content
+            const html = utils.convertHtml(striptags.strip(tokens[idx + 1].content, 'script'))
+            var script = striptags.fetch(content, 'script');
+            // let demoComponentContent = striptags.genInlineComponentText(html, script);
             // 移除描述，防止被添加到代码块
             tokens[idx + 2].children = [];
-  
+            console.log(content)
             return `<demo-block>
-                          <div slot="desc">${html}</div>
+                          <div slot="source">${content}</div>
                           <div slot="highlight">`;
           }
           return '</div></demo-block>\n';
@@ -61,42 +64,28 @@ module.exports = {
             entry: 'doc/main.ts', // 入口
             template: 'public/index.html', // 模板
             filename: 'index.html', // 输出文件
-            output: {
-              path: path.join(__dirname, 'lib'),
-              library: 'mics-ui',
-              libraryTarget: 'umd',
-              filename: isMinify ? '[name].min.js' : '[name].js',
-              umdNamedDefine: true,
-              // https://github.com/webpack/webpack/issues/6522
-              globalObject: 'typeof self !== \'undefined\' ? self : this'
-            },
-            externals: {
-              vue: {
-                root: 'Vue',
-                commonjs: 'vue',
-                commonjs2: 'vue',
-                amd: 'vue'
-              }
-            },
-            performance: false,
-            optimization: {
-              minimize: isMinify
-            }
         },
     },
+    configureWebpack: {
+      output: {
+          libraryExport: ['default']
+      }
+
+      },
     // 扩展 webpack 配置
     chainWebpack: config => {
         // @ 默认指向 src 目录，这里要改成 doc
-        // 另外也可以新增一个 ~ 指向 src
+        // 另外也可以新增一个 ~ 指向 package
         config.resolve.alias
             .set('@', path.resolve('doc'))
-            .set('~', path.resolve('src'))
+            .set('~', path.resolve('package'))
 
-        // 把 doc 和 src 加入编译，因为新增的文件默认是不被 webpack 处理的
+        // 把 doc 和 package 加入编译，因为新增的文件默认是不被 webpack 处理的
         config.module
             .rule('md')
             .test(/\.md/)
             .use('vue-loader')
+            // .loader('./md-loader/index.js')
             .loader('vue-loader')
             .end()
             .use('vue-markdown-loader')
@@ -109,7 +98,7 @@ module.exports = {
         config.module
             .rule('ts')
             .include.add(/doc/).end()
-            .include.add(/src/).end()
+            .include.add(/package/).end()
             .use('babel')
             .loader('babel-loader')
             .tap(options => {

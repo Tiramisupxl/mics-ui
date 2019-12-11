@@ -1,36 +1,33 @@
-/**
- * 转换成DOM字符串
- */
-const cheerio = require('cheerio')
 const { compileTemplate } = require('@vue/component-compiler-utils');
 const compiler = require('vue-template-compiler');
 
-exports.strip = (str, tags) => {
-  const $ = cheerio.load(str, { decodeEntities: false })
-
-  if (!tags || tags.length === 0) {
-    return str
-  }
-
-  tags = !Array.isArray(tags) ? [tags] : tags
-  let len = tags.length
-
-  while (len--) {
-    $(tags[len]).remove()
-  }
-
-  return $.html()
+function stripScript(content) {
+  const result = content.match(/<(script)>([\s\S]+)<\/\1>/);
+  return result && result[2] ? result[2].trim() : '';
 }
 
-exports.fetch = function(str, tag) {
-  var $ = cheerio.load(str, {decodeEntities: false});
-  if (!tag) return str;
+function stripStyle(content) {
+  const result = content.match(/<(style)\s*>([\s\S]+)<\/\1>/);
+  return result && result[2] ? result[2].trim() : '';
+}
 
-  return $(tag).html();
-};
+// 编写例子时不一定有 template。所以采取的方案是剔除其他的内容
+function stripTemplate(content) {
+  content = content.trim();
+  if (!content) {
+    return content;
+  }
+  return content.replace(/<(script|style)[\s\S]+<\/\1>/g, '').trim();
+}
 
+function pad(source) {
+  return source
+    .split(/\r?\n/)
+    .map(line => `  ${line}`)
+    .join('\n');
+}
 
-exports.genInlineComponentText = function(template, script) {
+function genInlineComponentText(template, script) {
   // https://github.com/vuejs/vue-loader/blob/423b8341ab368c2117931e909e2da9af74503635/lib/loaders/templateLoader.js#L46
   const finalOptions = {
     source: `<div>${template}</div>`,
@@ -73,3 +70,10 @@ exports.genInlineComponentText = function(template, script) {
   })()`;
   return demoComponentContent;
 }
+
+module.exports = {
+  stripScript,
+  stripStyle,
+  stripTemplate,
+  genInlineComponentText
+};

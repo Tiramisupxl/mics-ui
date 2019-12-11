@@ -170,6 +170,15 @@ textarea {
   -webkit-appearance: none;
 }
 
+input:focus, 
+textarea:focus {
+  outline: none;
+}
+
+input::-ms-clear {
+  display: none;
+}
+
 
 button {
   outline:none;
